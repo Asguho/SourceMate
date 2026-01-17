@@ -22,5 +22,10 @@
 		"tailwindcss": "^4.1.17",
 		"typescript": "^5.9.3",
 		"vite": "^7.2.6"
+	},
+	"dependencies": {
+		"@ai-sdk/openai": "^3.0.12",
+		"ai": "^6.0.39",
+		"zod": "^4.3.5"
 	}
 }
