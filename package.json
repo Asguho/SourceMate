@@ -1,0 +1,10 @@
+{
+    "name": "sourcemate",
+    "private": true,
+    "workspaces": [
+        "packages/*"
+    ],
+    "devDependencies": {
+        "@types/bun": "latest"
+    }
+}
