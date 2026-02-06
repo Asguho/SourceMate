@@ -25,9 +25,9 @@ async fn split_window_with_url(app: AppHandle, url: String) -> Result<(), String
         close_external_webview(app.clone()).await?;
     }
 
-    // Get the main window (using get_window for unstable features)
+    // Get the main window
     println!("[lib.rs] Getting main window");
-    let window = app.get_window("main").ok_or("Main window not found")?;
+    let window = app.get_webview_window("main").ok_or("Main window not found")?;
 
     // Get the current window size
     let size = window
@@ -51,8 +51,9 @@ async fn split_window_with_url(app: AppHandle, url: String) -> Result<(), String
         height
     );
 
-    
-    let _webview_right = window
+    // Get the underlying window and add a child webview
+    let parent_window = window.as_ref().window();
+    let _webview_right = parent_window
         .add_child(
             tauri::webview::WebviewBuilder::new(
                 "external_webview",
@@ -64,8 +65,8 @@ async fn split_window_with_url(app: AppHandle, url: String) -> Result<(), String
         )
         .map_err(|e| format!("Failed to create right webview: {}", e))?;
 
-    _webview_right.set_size( PhysicalSize::new(width / 2, height)).map_err(|e| format!("Failed to set size for right webview: {}", e))?;
-    _webview_right.set_position( PhysicalPosition::new(width / 2, 0)).map_err(|e| format!("Failed to set position for right webview: {}", e))?;
+    _webview_right.set_size(PhysicalSize::new(width / 2, height)).map_err(|e| format!("Failed to set size for right webview: {}", e))?;
+    _webview_right.set_position(PhysicalPosition::new(width / 2, 0)).map_err(|e| format!("Failed to set position for right webview: {}", e))?;
     println!("[lib.rs] Right webview created successfully");
     _webview_right.show().map_err(|e| format!("Failed to show right webview: {}", e))?;
     // Mark as split
@@ -90,7 +91,7 @@ async fn close_external_webview(app: AppHandle) -> Result<(), String> {
         return Err("Window is not split".to_string());
     }
     println!("[lib.rs] Getting external webview");
-    let window = app.get_window("main").ok_or("Main window not found")?;
+    let window = app.get_webview_window("main").ok_or("Main window not found")?;
     let webview = window
         .get_webview("external_webview")
         .ok_or("External webview not found")?;
