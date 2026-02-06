@@ -49,6 +49,7 @@
 	},
 	"dependencies": {
 		"@ai-sdk/openai": "^3.0.25",
+		"@b-fuze/deno-dom": "npm:@jsr/b-fuze__deno-dom",
 		"@openrouter/ai-sdk-provider": "^2.1.1",
 		"@oslojs/jwt": "^0.3.0",
 		"@oslojs/otp": "^1.1.0",
